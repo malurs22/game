@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizz do Amor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+        }
+        h1, p {
+            margin-bottom: 20px;
+        }
+        .question {
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        .option {
+            background-color: #e0e0e0;
+            border: none;
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .option:hover {
+            background-color: #d0d0d0;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="intro">
+        <h1>Oi, amor!</h1>
+        <p>Dois anos se passaram e eu fiz um quizz rapidinho sobre nós. Espero que goste do presentinho que ganhará no final!</p>
+    </div>
+    
+    <!-- Perguntas -->
+    <div id="questions-container">
+        <div class="question hidden" id="q1">
+            <div>1) Qual foi a data em que nos falamos pela primeira vez?</div>
+            <div class="options">
+                <button class="option" onclick="checkAnswer(this, 'certo', 'q1', 'q2')">13/08</button>
+                <button class="option" onclick="checkAnswer(this, 'errado', 'q1', 'q2')">12/08</button>
+                <button class="option" onclick="checkAnswer(this, 'errado', 'q1', 'q2')">20/08</button>
+            </div>
+        </div>
+
+        <div class="question hidden" id="q2">
+            <div>2) Quando nos vimos pela primeira vez?</div>
+            <div class="options">
+                <button class="option" onclick="checkAnswer(this, 'errado', 'q2', 'q3')">20/08</button>
+                <button class="option" onclick="checkAnswer(this, 'certo', 'q2', 'q3')">21/08</button>
+                <button class="option" onclick="checkAnswer(this, 'errado', 'q2', 'q3')">01/09</button>
+            </div>
+        </div>
+
+        <div class="question hidden" id="q3">
+            <div>3) Quantos jogos vimos o Minas perder pessoalmente?</div>
+            <div class="options">
+                <button class="option" onclick="checkAnswer(this, 'errado', 'q3', 'q4')">1</button>
+                <button class="option" onclick="checkAnswer(this, 'certo', 'q3', 'q4')">2</button>
+                <button class="option" onclick="checkAnswer(this, 'errado', 'q3', 'q4')">3</button>
+            </div>
+        </div>
+
+        <div class="question hidden" id="q4">
+            <div>4) Qual será o nome da nossa primeira filha?</div>
+            <div class="options">
+                <button class="option" onclick="checkAnswer(this, 'errado', 'q4', 'q5')">Julia</button>
+                <button class="option" onclick="checkAnswer(this, 'errado', 'q4', 'q5')">Mariana</button>
+                <button class="option" onclick="checkAnswer(this, 'certo', 'q4', 'q5')">Cecilia</button>
+            </div>
+        </div>
+
+        <div class="question hidden" id="q5">
+            <div>5) Qual foi nossa primeira viagem juntas?</div>
+            <div class="options">
+                <button class="option" onclick="checkAnswer(this, 'certo', 'q5', 'q6')">Botucatu</button>
+                <button class="option" onclick="checkAnswer(this, 'errado', 'q5', 'q6')">Praia</button>
+                <button class="option" onclick="checkAnswer(this, 'errado', 'q5', 'q6')">São Thomé</button>
+            </div>
+        </div>
+
+        <div class="question hidden" id="q6">
+            <div>6) Onde comemoramos nosso primeiro Natal?</div>
+            <div class="options">
+                <button class="option" onclick="checkAnswer(this, 'certo', 'q6', 'q7')">Atibaia</button>
+                <button class="option" onclick="checkAnswer(this, 'errado', 'q6', 'q7')">Conchas</button>
+                <button class="option" onclick="checkAnswer(this, 'errado', 'q6', 'q7')">Divinópolis</button>
+            </div>
+        </div>
+
+        <div class="question hidden" id="q7">
+            <div>7) Qual comida você mais gosta que eu faça pra você?</div>
+            <div class="options">
+                <button class="option" onclick="checkAnswer(this, 'errado', 'q7', 'final')">Bolo de cenoura</button>
+                <button class="option" onclick="checkAnswer(this, 'certo', 'q7', 'final')">Risoto</button>
+                <button class="option" onclick="checkAnswer(this, 'errado', 'q7', 'final')">Hambúrguer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resultado -->
+    <div class="result hidden" id="result">
+        <p id="message"></p>
+        <a id="present-link" href="#">Clique aqui para receber seu presente</a>
+    </div>
+</div>
+
+<script>
+    let correctAnswers = 0;
+    let totalQuestions = 7;
+
+    // Mostra a primeira pergunta
+    document.getElementById('q1').classList.remove('hidden');
+
+    function checkAnswer(button, status, currentQuestion, nextQuestion) {
+        if (status === 'certo') {
+            correctAnswers++;
+        }
+        button.disabled = true;
+        button.style.backgroundColor = (status === 'certo') ? 'lightgreen' : 'lightcoral';
+        
+        // Oculta o enunciado "Oi, amor!" após a primeira resposta
+        if (currentQuestion === 'q1') {
+            document.getElementById('intro').classList.add('hidden');
+        }
+
+        setTimeout(function() {
+            document.getElementById(currentQuestion).classList.add('hidden');
+            if (nextQuestion === 'final') {
+                showResult();
+            } else {
+                document.getElementById(nextQuestion).classList.remove('hidden');
+            }
+        }, 500); // Pequeno delay para o próximo aparecer
+    }
+
+    function showResult() {
+        const resultDiv = document.getElementById('result');
+        const message = document.getElementById('message');
+        const presentLink = document.getElementById('present-link');
+        
+        resultDiv.classList.remove('hidden');
+
+        if (correctAnswers === totalQuestions) {
+            message.textContent = "Parabéns amor, você acertou tudo! Te amo 😍";
+            presentLink.href = "https://malurs22.github.io/mallupad/";
+        } else {
+            message.textContent = "Ok, parece que você não sabe de tudo, mas está tudo bem. Te amo! ❤️";
+            presentLink.href = "https://malurs22.github.io/mallupad/";
+        }
+    }
+</script>
+
+</body>
+</html>
